@@ -1,0 +1,43 @@
+<html>
+<head>
+</head>
+<body>
+
+
+Whose posts would you like to see?
+<br>
+
+<form action="/view_post" method="GET"><!--Using the Get method right now for debugging
+but can always change to post when we are ready for production -->
+<!--we are going to be populating this form by iterating through the data that was returned
+from the query
+form was sent in with a parameter called user_list
+as we interate through each line in user_list, for each line we are going to be
+printing out a radio button
+the name is poster, and we are going to be sending a name value pair with poster and the
+name of the person who posted
+and then we have the username that was sent in from our query, remember the query was selecting
+distinct username, so we have a username attribute here-->
+
+<!--again we have the double curly braces to indicate that were taking a value from something that was
+sent in to our template as a parameter
+	*and we are also going to be printing out as the text that goes with that choice, the persons
+ 	 name
+ * and this is going to iterate through and do that for each person-->
+{% for line in user_list %}
+<input type="radio" name="poster" value={{line.username}}>{{line.username}}</input>
+	<br>
+{% endfor %}
+
+<input type="submit" value="View Posts">
+
+</form>
+
+
+<a href="/home">Go back</a><br>
+<a href="/logout">Logout</a>
+
+</body>
+
+
+</html>

@@ -1,0 +1,25 @@
+<html>
+  <head>
+  </head>
+
+
+  <body>
+    <!-- {% if error %}
+    <div style="color: red">{{ error }}</div>
+    {% endif %} -->
+
+    <h1>Follow Someone:</h1>
+      <br>
+      <form action="/follow" method="POST">
+        <input type="text" name = "followeeUsername" placeholder="Enter username:" required/>
+        <input type="submit" value="Follow">
+
+        {% if error %}
+          <p class="error"><strong>Type of Error:</strong> {{error}}</p>
+        {% endif %}
+      </form>
+
+<a href="/home">Go Back</a>
+
+  </body>
+</html>

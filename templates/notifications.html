@@ -1,0 +1,65 @@
+<html>
+<head>
+</head>
+<body>
+
+
+Here are you notifications!
+<br>
+
+<form action="/notifications" method="POST"><!--Using the Get method right now for debugging
+but can always change to post when we are ready for production -->
+<!--we are going to be populating this form by iterating through the data that was returned
+from the query
+form was sent in with a parameter called user_list
+as we interate through each line in user_list, for each line we are going to be
+printing out a radio button
+the name is poster, and we are going to be sending a name value pair with poster and the
+name of the person who posted
+and then we have the username that was sent in from our query, remember the query was selecting
+distinct username, so we have a username attribute here-->
+
+<!--again we have the double curly braces to indicate that were taking a value from something that was
+sent in to our template as a parameter
+	*and we are also going to be printing out as the text that goes with that choice, the persons
+ 	 name
+ * and this is going to iterate through and do that for each person-->
+
+<br>
+{% if error %}
+	<p class="error"><strong>Type of Error:</strong> {{error}}</p>
+{% endif %}
+
+
+{% for line in follower %}
+<!-- {{follower}}<br>
+{{line}}<br> -->
+<label for="accept">accept</label>
+choice: <input type="radio" name= "choice" id="accept" value="accept">{{line.follower}}</input>
+<!-- <input type="radio" name={{line.follower}} id="accept" value="accept">{{line.follower}}</input> -->
+<br>
+
+<label for="decline">decline</label>
+choice: <input type="radio" name= "choice" id="decline" value="decline">{{line.follower}}</input>
+<!-- <input type="radio" name ={{line.follower}}  id="decline" value="decline">{{line.follower}}</input> -->
+<br>
+{% endfor %}
+<br>
+<input type="submit" value="notifications">
+
+
+
+</form>
+<!--
+<h1>Followed by:</h1>
+    {% for line in notifications %}
+        {{ line.follower }}<br>
+    {% endfor %} -->
+
+
+<a href="/logout">Logout</a>
+
+</body>
+
+
+</html>

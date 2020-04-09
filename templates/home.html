@@ -1,0 +1,87 @@
+<html>
+<head>
+</head>
+<body>
+
+
+<h1>Welcome {{username}}</h1>
+<br>
+<table>
+<th>Followers</th>
+<th>Following</th>
+</table>
+<br>
+{% for line in photos %}
+<tr>
+	<td>{{line.follower}}</td>
+	<td>{{line.followee}}</td>
+</tr>
+{% endfor %}
+
+Here are your photos:
+<br>
+<table>
+	<th>Time</th>
+	<th>Post</th>
+<!--Now something that we haven't seen before, is that we have multiple lines of data and we want to
+iterate through them, with the following code below.
+ -->
+{% for line in photos %}
+	<tr>
+		<td>{{line.ts}}</td>
+		<td>{{line.blog_post}}</td>
+	</tr>
+{% endfor %}
+ <!--end of for loop -->
+
+
+ <!--
+ code above is basically saying, for each line in post, we are going to start a new html table row,
+ <tr></tr>
+ and have two data items in it
+ line.ts, and line.blog_post
+ ts, and blog_post were are the two attributs that came from the query
+ and the line has two fiels in it, ts and blog_post
+ this way we are able to retrieve attribute by attribute, the data in the lines
+ and print it out-->
+</table>
+
+
+<br>
+<form action="/post" method="POST">
+
+	<!--{{username}} is the value passed from data in previous forms -->
+	<input type="text" name = "photo" placeholder="post" required/> </br>
+	<input type="submit" value = Post />
+</form>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+
+
+<br>
+
+<br>
+
+
+
+<!--end of for table -->
+<a href="/notifications">notifications</a> <!--links in href reference actual flask function
+specified in the the form action -->
+<br>
+<!-- <a href="/select_user">Select a Finstagram user</a> -->
+<!-- <br> -->
+<a href="/follow">Follow</a>
+<!-- <br> -->
+<!-- <a href="/groups">Friend Groups</a> -->
+<br>
+<a href="/logout">Logout</a>
+
+</body>
+
+
+</html>
