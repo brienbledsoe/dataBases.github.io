@@ -41,11 +41,15 @@ choice: <input type="radio" name= "choice" id="accept" value="accept">{{line.fol
 
 <label for="decline">decline</label>
 choice: <input type="radio" name= "choice" id="decline" value="decline">{{line.follower}}</input>
-<!-- <input type="radio" name ={{line.follower}}  id="decline" value="decline">{{line.follower}}</input> -->
 <br>
-{% endfor %}
+Testing <br>
+
+<input type="hidden" id="custId" name="follower" value={{line.follower}}>
 <br>
 <input type="submit" value="notifications">
+
+{% endfor %}
+<!-- <input type="submit" value="notifications" > -->
 
 
 

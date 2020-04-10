@@ -232,6 +232,10 @@ def show_notifications():
     if(request.method == 'POST'):
         message="Testing"
         choice = request.form.get('choice')
+        follower = request.form.get('follower')
+        print("--------",follower)
+        #currentFollower = {{follower}}
+        #print(currentFollower)
         username=session['username']
         cursor=conn.cursor()
         query = 'SELECT followStatus FROM follow\
@@ -254,10 +258,17 @@ def show_notifications():
             return render_template('notifications.html', error = message)
         else:
             #message = "This user already follows you"
-            query = 'DELETE FROM follow JOIN person ON followee=username\
-            WHERE followee=%s'
+            # queryFollower = 'SELECT follower FROM follow\
+            # JOIN person ON followee=username WHERE followee = %s AND followStatus =0 '
+            # cursor.execute(queryFollower,(username))
+            # theFollower = cursor.fetchall()
+            # print("happy=====-----")
+            # print("theFollower: ",theFollower)
+            query = 'DELETE FROM follow\
+            WHERE followee=%s AND follower=%s'
+            print("follower: ",follower)
             conn.commit()
-            cursor.execute(query,(username))
+            cursor.execute(query,(username,follower))
             #cursor.close()
             message = 'You have declined the request'
             return render_template('notifications.html', error = message)
