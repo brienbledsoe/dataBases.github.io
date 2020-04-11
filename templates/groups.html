@@ -1,0 +1,26 @@
+<html>
+  <head>
+  </head>
+
+
+  <body>
+    <!-- {% if error %}
+    <div style="color: red">{{ error }}</div>
+    {% endif %} -->
+
+    <h1>Create a group just for your friends!:</h1>
+      <br>
+      <form action="/friendGroups" method="POST">
+        <input type="text" name = "groupName" placeholder="Create friendgroup:" required/><br><br>
+        <textarea name="description" style="width:200px; height:200px;" placeholder="Please provide a description for your group"></textarea><br><br>
+        <input type="submit" value="Create">
+
+        {% if error %}
+          <p class="error"><strong>Type of Error:</strong> {{error}}</p>
+        {% endif %}
+      </form>
+
+<a href="/home">Go Back</a>
+
+  </body>
+</html>

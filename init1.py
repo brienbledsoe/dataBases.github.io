@@ -306,12 +306,31 @@ def show_notifications():
 
 # authenticating creation or joining
 # a group
-@app.route( "/groupsAuth", methods = ["POST"] )
+@app.route( "/friendGroups", methods = ["GET","POST"] )
 def groupAuth( ):
     # grab username and set error to none
-    username = session["username"]
-    error = None
+    if(request.method=="POST"):
 
+        username = session["username"]
+        groupName= request.form["groupName"]
+        description=request.form.get("description")
+        cursor = conn.cursor()
+        query = 'SELECT groupName, groupCreator FROM friendgroup WHERE groupName= %s AND\
+        groupCreator=%s'
+        cursor.execute(query,(groupName,username))
+        data=cursor.fetchall()
+        print(data)
+        if(data):
+            error = "You have already created a friendgroup with the name %s" % (groupName)
+            return render_template('groups.html',error=error)
+        else:
+            query = 'INSERT INTO friendgroup(groupName,groupCreator,description) VALUES (%s,%s,%s)'
+            cursor.execute(query,(groupName,username,description))
+            conn.commit()
+            error = None
+            return render_template('groups.html',error=error)
+    # error = None
+    return render_template('groups.html')
 
 @app.route('/logout')
 def logout():
