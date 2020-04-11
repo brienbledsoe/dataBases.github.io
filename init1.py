@@ -230,7 +230,7 @@ def followUser():
 @app.route('/notifications', methods=["GET", "POST", "DELETE"])#will accept get or post parameters
 def show_notifications():
     if(request.method == 'POST'):
-        message="Testing"
+        # message="Testing"
         choice = request.form.get('choice')
         follower = request.form.get('follower')
         print("--------",follower)
@@ -274,7 +274,6 @@ def show_notifications():
             return render_template('notifications.html', error = message)
 
 
-    print("Is this working hello")
     username = session['username']
 
     #decline = request.form['decline']
