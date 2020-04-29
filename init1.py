@@ -1,15 +1,24 @@
 #Import Flask Library
+import os
+import urllib.request
+
 from flask import Flask, render_template, request, session, url_for, redirect
+from werkzeug.utils import secure_filename
 from datetime import datetime
+import time
 import pymysql.cursors
+
+
 
 #Initialize the app from Flask
 app = Flask(__name__)
+# UPLOAD_FOLDER = r'C:\Users\Brien Bledsoe\Documents\Intro_to_Databases\Project\Part3proj\Images'
 UPLOAD_FOLDER = r'C:\Users\Brien Bledsoe\Documents\Intro_to_Databases\Project\Part3proj\Images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+# app.secret_key = 'secret key'  thros error on username = session[username] when I run this
 #Configure MySQL
 conn = pymysql.connect(host='localhost',
                        port = 3308,
@@ -343,38 +352,48 @@ def allowed_file(filename):
 def postPhoto():
     if(request.method=="POST"):
         username = session["username"]
-        image = request.form["img"]
+        image = request.files["img"]
         # pID = 11111
         print("This image: ", image)
-        print("====================================================+++")
+        print("====================================================++++++")
         caption = request.form.get("caption")
-        allFollowers = request.form.get("allFollowersChoice")
+        allFollowers = request.form.get("choice")
+        print("This is the allFollowers variable-------: ",allFollowers)
+
         cursor = conn.cursor()
-        if image not in request.files:
-            message = 'No file part'
-            return render_template('post.html',message=message)
+        print("image filename: ", image.filename)
+        # if image not in request.files:
+        #     print("inside first if========================+++") #the other if statements don't print
+        #     print("image filename: ",image.filename)
+        #     message = 'No file part'
+        #     return render_template('post.html',message=message)
+        # # if image.filename="":
         if image.filename == "":
+            print("inside second if+++++++++--------")
             message = "no files selected for upload"
             return render_template('post.html',message=message)
-        if image and allowed_file(image):
-            image = secure_filename(image.filename)
-            image.save(os.path.join("UPLOAD_FOLDER"),filename)
+        if image and allowed_file(image.filename):
+            print("inside third if ++++++++")
+            imageFileName = secure_filename(image.filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'],imageFileName))
             if allFollowers == 1:
+                print("inside last if statement----------------------")
                 photoID = username + image.filename #how do I use AUTO INCREMENT
                 #I think the query isn't working because of pID not being correctly generated
                 #by the auto increment feature, we haven't figured out how to add auto increment
-                query = "INSERT INTO photo(pID,postingDate,filePath,allFollowers,caption,poster)\
-                VALUES (%i,%s,%s,%i,%s,%s)"
-                cursor.execute(query, (pID,time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,allFollowers,caption,username))
+                query = "INSERT INTO photo(postingDate,filePath,allFollowers,caption,poster)\
+                VALUES (%s,%s,%i,%s,%s)"
+                cursor.execute(query, (time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,allFollowers,caption,username))
                 conn.commit()
                 message = 'None'
                 render_template('post.html',message=message)
             else:
                 allFollowers = 0
                 photoID = username + image.filename #how do I use AUTO INCREMENT
-                query = "INSERT INTO photo(pID,postingDate,filePath,allFollowers,caption,poster)\
-                VALUES (%s,%s,%s,%s,%s,%s)"
-                cursor.execute(query, (photoID,time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,allFollowers,caption,username))
+                query = "INSERT INTO photo(postingDate,filePath,allFollowers,caption,poster)\
+                VALUES (%s,%s,allFollowers,%s,%s) "
+                cursor.execute(query, (time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,caption,username))
+                # cursor.execute(query)
                 conn.commit()
                 message = 'File successfully uploaded'
                 render_template('post.html',message=message)

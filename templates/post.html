@@ -9,10 +9,12 @@
   <body>
 
 
-    <form action="/post_photo" method="POST">
+    <form action="/post_photo" method="POST" enctype=multipart/form-data>
     <br>
     <label for="img">Select image:</label><br>
+    <!-- <input type="file" id="img" name="img" accept="image/*"/><br> -->
     <input type="file" id="img" name="img" accept="image/*"/><br>
+
     <label for=caption>Add caption:</label><br>
     <!-- <input type="text" id="caption" name="caption" placeholder="Add Caption"/> -->
     <textarea id="caption" name="caption" style="width:200px; height:200px;" placeholder="Would you like to add a caption?"></textarea><br>
@@ -20,8 +22,8 @@
     <input type="radio" name="choice" id="AllFollowersChoice" value=1/><br>
     <input type="submit">
 
-    {% if error %}
-      <p class="error"><strong>Type of Error:</strong> {{error}}</p>
+    {% if message %}
+      <p class="error"><strong>Type of Error:</strong> {{message}}</p>
     {% endif %}
     </form>
 
