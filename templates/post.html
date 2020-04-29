@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Post Photo</title>
+  </head>
+  <body>
+
+
+    <form action="/post_photo" method="POST">
+    <br>
+    <label for="img">Select image:</label><br>
+    <input type="file" id="img" name="img" accept="image/*"/><br>
+    <label for=caption>Add caption:</label><br>
+    <!-- <input type="text" id="caption" name="caption" placeholder="Add Caption"/> -->
+    <textarea id="caption" name="caption" style="width:200px; height:200px;" placeholder="Would you like to add a caption?"></textarea><br>
+    <label for="allFollowersChoice">Can all of your followers view your post:</label>
+    <input type="radio" name="choice" id="AllFollowersChoice" value=1/><br>
+    <input type="submit">
+
+    {% if error %}
+      <p class="error"><strong>Type of Error:</strong> {{error}}</p>
+    {% endif %}
+    </form>
+
+
+
+
+
+  </body>
+</html>

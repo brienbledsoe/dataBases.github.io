@@ -1,10 +1,15 @@
 #Import Flask Library
 from flask import Flask, render_template, request, session, url_for, redirect
+from datetime import datetime
 import pymysql.cursors
 
 #Initialize the app from Flask
 app = Flask(__name__)
-
+UPLOAD_FOLDER = r'C:\Users\Brien Bledsoe\Documents\Intro_to_Databases\Project\Part3proj\Images'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+# app.secret_key = "secret key"
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 #Configure MySQL
 conn = pymysql.connect(host='localhost',
                        port = 3308,
@@ -330,6 +335,57 @@ def groupAuth( ):
             return render_template('groups.html',error=error)
     # error = None
     return render_template('groups.html')
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/post_photo', methods=["POST", "GET"])
+def postPhoto():
+    if(request.method=="POST"):
+        username = session["username"]
+        image = request.form["img"]
+        # pID = 11111
+        print("This image: ", image)
+        print("====================================================+++")
+        caption = request.form.get("caption")
+        allFollowers = request.form.get("allFollowersChoice")
+        cursor = conn.cursor()
+        if image not in request.files:
+            message = 'No file part'
+            return render_template('post.html',message=message)
+        if image.filename == "":
+            message = "no files selected for upload"
+            return render_template('post.html',message=message)
+        if image and allowed_file(image):
+            image = secure_filename(image.filename)
+            image.save(os.path.join("UPLOAD_FOLDER"),filename)
+            if allFollowers == 1:
+                photoID = username + image.filename #how do I use AUTO INCREMENT
+                #I think the query isn't working because of pID not being correctly generated
+                #by the auto increment feature, we haven't figured out how to add auto increment
+                query = "INSERT INTO photo(pID,postingDate,filePath,allFollowers,caption,poster)\
+                VALUES (%i,%s,%s,%i,%s,%s)"
+                cursor.execute(query, (pID,time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,allFollowers,caption,username))
+                conn.commit()
+                message = 'None'
+                render_template('post.html',message=message)
+            else:
+                allFollowers = 0
+                photoID = username + image.filename #how do I use AUTO INCREMENT
+                query = "INSERT INTO photo(pID,postingDate,filePath,allFollowers,caption,poster)\
+                VALUES (%s,%s,%s,%s,%s,%s)"
+                cursor.execute(query, (photoID,time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,allFollowers,caption,username))
+                conn.commit()
+                message = 'File successfully uploaded'
+                render_template('post.html',message=message)
+
+
+        else:
+            message ='Allowed file types are png,jpg,jpeg,gif'
+            return render_template('post.html',message=message)
+
+    return render_template('post.html')
+
 
 @app.route('/logout')
 def logout():
