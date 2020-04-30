@@ -369,29 +369,35 @@ def postPhoto():
         #     return render_template('post.html',message=message)
         # # if image.filename="":
         if image.filename == "":
-            print("inside second if+++++++++--------")
+            print("inside second if+++++++++---------")
             message = "no files selected for upload"
             return render_template('post.html',message=message)
         if image and allowed_file(image.filename):
             print("inside third if ++++++++")
             imageFileName = secure_filename(image.filename)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'],imageFileName))
-            if allFollowers == 1:
+            if allFollowers == "one":
+                # allFollowers=1
                 print("inside last if statement----------------------")
-                photoID = username + image.filename #how do I use AUTO INCREMENT
-                #I think the query isn't working because of pID not being correctly generated
-                #by the auto increment feature, we haven't figured out how to add auto increment
+                print("allFollowers is one----------: ",allFollowers)
+                allFollowers=1
+                #auto increment feature works by leaving out the attribute that we want to be randomly generated
+                #an integer value in the place of the attribute being left out, as you can see below that I left
+                #out pID from  the table list and in the execute statement below
                 query = "INSERT INTO photo(postingDate,filePath,allFollowers,caption,poster)\
-                VALUES (%s,%s,%i,%s,%s)"
-                cursor.execute(query, (time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,allFollowers,caption,username))
+                VALUES (%s,%s,1,%s,%s)"
+                #for some reason placing allFollowers variable in values list in the place of %i doesn't work
+                #Have to cardcode a integer value inside of it
+                cursor.execute(query, (time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,caption,username))
                 conn.commit()
                 message = 'None'
                 render_template('post.html',message=message)
             else:
                 allFollowers = 0
+                print("else allFollowers ======:",allFollowers)
                 photoID = username + image.filename #how do I use AUTO INCREMENT
                 query = "INSERT INTO photo(postingDate,filePath,allFollowers,caption,poster)\
-                VALUES (%s,%s,allFollowers,%s,%s) "
+                VALUES (%s,%s,0,%s,%s) "
                 cursor.execute(query, (time.strftime('%Y-%m-%d %H:%M:%S'),image.filename,caption,username))
                 # cursor.execute(query)
                 conn.commit()
