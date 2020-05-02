@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>title</title>
+  </head>
+  <body>
+    <h1>HELLOOOOOOOOOO</h1>
+
+    <!-- <form action="/viewPhotos" method="GET">
+
+      {%for item in photoIDS%}
+        Photos {{item.pID}}<br>
+      {%endfor%}
+
+    </form> -->
+
+    <form action="/viewPhotos" method="POST">
+      {%for item in photoIDS%}
+        Photos {{item.pID}}<br>
+      {%endfor%}
+
+
+      {%for item in follower%}
+
+          {{item.follower}}
+          <label for=viewFollowerPhoto>View Followers Photo</label>
+          <input type="radio" id="viewFollowersPhoto" name="follower" value={{item.follower}}>
+          <br>
+          <!-- <input type="radio" name="view" id="AllFollowersChoice" value="view" ><br> -->
+
+
+      {%endfor%}
+
+        <input type="submit">
+
+      {% if message %}
+        <p class="error"><strong>Type of Message:</strong> {{message}}</p>
+      {% endif %}
+
+    </form>
+
+
+
+
+
+
+
+
+<a href="/home">Go Back</a>
+
+  </body>
+</html>
