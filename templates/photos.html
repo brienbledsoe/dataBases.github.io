@@ -7,15 +7,8 @@
     <title>title</title>
   </head>
   <body>
-    <h1>HELLOOOOOOOOOO</h1>
+    <h1>View Photos</h1>
 
-    <!-- <form action="/viewPhotos" method="GET">
-
-      {%for item in photoIDS%}
-        Photos {{item.pID}}<br>
-      {%endfor%}
-
-    </form> -->
 
     <form action="/viewPhotos" method="POST">
       {%for item in photoIDS%}
@@ -34,11 +27,14 @@
 
       {%endfor%}
 
+
         <input type="submit">
 
       {% if message %}
         <p class="error"><strong>Type of Message:</strong> {{message}}</p>
       {% endif %}
+
+      <!-- <input type="submit"> -->
 
     </form>
 
@@ -48,7 +44,7 @@
 
 
 
-
+<a href="/photoInfo">View Photo Info</a><br> 
 <a href="/home">Go Back</a>
 
   </body>

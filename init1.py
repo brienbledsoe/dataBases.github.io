@@ -415,14 +415,16 @@ def postPhoto():
 def viewPhotos():
     if (request.method == 'POST'):
         follower = request.form["follower"]
+        # filePath = request.form.get("filePath")
+        # print("THis is the filePath--: ",filePath)
         print("This is the follower: ", follower)
         username = session['username']
-        print('The follower is testing------------------: ', follower)
+        print('The follower is testing-------------------: ', follower)
         cursor = conn.cursor();
         query='SELECT pID FROM photo WHERE\
         poster=%s OR pID IN\
         (SELECT pID FROM photo NATURAL JOIN follow\
-        JOIN person ON followee=username WHERE follower=%s AND followStatus = 1)'
+        JOIN person ON followee=username WHERE follower=%s AND followStatus = 1 ORDER BY pID DESC)'
 
         # needed the first name of the user in the session
         # joining person with the follower ID
@@ -432,7 +434,8 @@ def viewPhotos():
         print("scalar query ========", data)
         cursor.close()
         if(data):
-            return render_template('photos.html',photoIDS=data)
+
+            return render_template('photos.html', photoIDS=data)
         else:
             message= 'There are no photos visible to you!'
             return render_template('photos.html', message=message)
@@ -461,42 +464,28 @@ def viewPhotos():
 
     return render_template('photos.html')
 
+#
+@app.route('/photoInfo',methods=['POST','GET'])
+def furtherInfo():
+    if(request.method=="POST"):
+        # pass
+        username = session['username']
+        cursor = conn.cursor();
+        # query= 'SELECT '
+        filePath = request.form.get("filePath")
+        print("THis is the filePath--: ",filePath)
+        query = 'SELECT filePath FROM photo JOIN person\
+        ON poster=username WHERE username=%s'
+        cursor.execute(query,(username))
+        photoURL = cursor.fetchall()
+        cursor.close()
+        print("This is photoURL--: ",photoURL)
+        # full_filename = os.path.join(app.config['UPLOAD_FOLDER'],)
+        message= "testing page"
+        return render_template("photoinfo.html",message=message,photos=photoURL)
 
-# @app.route('/getPhotoFollower',methods=['POST'])
-# def getFollower():
-#
-#         if(request.method == "POST"):
-#             username=session['username']
-#             follower = request.form.get('follower')
-#             print("This is the follower: ",follower)
-#         else:
-#             pass
-#         username = session['username']
-#         # follower = request.form.get('follower')
-#         # print("this is follower",follower)
-#         cursor = conn.cursor();
-#         # query = 'SELECT follower FROM follow WHERE followee=%s\
-#         # AND followStatus = 1'
-#         query='SELECT follower FROM follow\
-#         JOIN person ON followee=username WHERE followee= %s AND followStatus = 1'
-#         cursor.execute(query,(username))
-#         # followerData = cursor.fetchall()
-#         followerData = cursor.fetchall()
-#         # print("follower data---------------------: ",followerData)
-#         cursor.close()
-#         if(followerData):
-#             message = "There is follower data"
-#             # return render_template('photos.html',follower=followerData,message=message)
-#             return render_template('photos.html',message=message,follower=followerData)
-#         else:
-#             message= 'No one follows you so you may not view anyone\
-#             elses photos1'
-#             # return render_template('photos.html',follower=message)
-#             return render_template('photos.html',message=message)
-#
-#
-#         return render_template('photos.html')
-#
+    return render_template("photoinfo.html")
+
 
 @app.route('/logout')
 def logout():

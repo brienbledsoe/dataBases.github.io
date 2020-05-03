@@ -1,0 +1,44 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>title</title>
+  </head>
+  <body>
+
+    <h1>Select a photo!</h1>
+    <form action="/photoInfo" method="POST">
+
+
+
+        {%for item in photos%}
+        <!-- {{item.filePath}}<br> -->
+        <label for=photoInfo>View Further Photo Info</label>
+        <input type="radio" id="photoInfo" name="filePath" value={{item.filePath}}>{{item.filePath}}<br>
+        {%endfor%}
+
+
+
+
+        <input type="submit">
+
+      {% if message %}
+        <p class="error"><strong>Type of Message:</strong> {{message}}</p>
+      {% endif %}
+
+      <!-- <input type="submit"> -->
+
+    </form>
+
+
+
+
+
+
+
+  </body>
+</html>
