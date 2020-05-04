@@ -1,7 +1,6 @@
 #Import Flask Library
 import os
 import urllib.request
-
 from flask import Flask, render_template, request, session, url_for, redirect
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -52,7 +51,6 @@ def register():
 #Authenticates the login
 @app.route('/loginAuth', methods=['GET', 'POST'])
 def loginAuth():
-
     #grabs information from the forms
     username = request.form['username']
     password = request.form['password']
@@ -417,9 +415,12 @@ def viewPhotos():
         print("ffffffffffffffffffffffffffffffuck")
         groupCreator = request.form["groupCreator"]
         username = session["username"]
-        print("this is group creator help -------: ", groupCreator)
+        # file = request.form["file"]
+        # myfile = request.form["file"]
+        # print("This is the fileeee3--------: ",file)
+        print("this is group creator help ---------: ", groupCreator)
         cursor = conn.cursor()
-        query = 'SELECT pID FROM photo NATURAL JOIN sharedwith\
+        query = 'SELECT pID,filePath FROM photo NATURAL JOIN sharedwith\
         NATURAL JOIN belongto WHERE groupCreator=%s OR username=%s'
         cursor.execute(query,(groupCreator,username))
         groupData = cursor.fetchall()
@@ -427,7 +428,7 @@ def viewPhotos():
         message = "sending friend group data"
         return render_template("photos.html",message=message,groupData=groupData)
         # follower = request.form["follower"]
-        # file = request.form.get("filepath")
+
         # print("This is the file-----: ",file)
         # print("This is the follower----------: ",follower)
         # full_filename = os.path.join(app.config['UPLOAD_FOLDER'], file)
@@ -447,32 +448,34 @@ def viewPhotos():
     cursor = conn.cursor();
     # query = 'SELECT follower FROM follow WHERE followee=%s\
     # AND followStatus = 1'
-    query='SELECT allFollowers FROM photo NATURAL JOIN follow\
-    WHERE followStatus= 1 OR follower=%s'
+    # query='SELECT allFollowers FROM photo NATURAL JOIN follow\
+    # WHERE followStatus= 1 OR follower=%s'
+    query='SELECT pID FROM photo NATURAL JOIN follow\
+    WHERE followStatus= 1 AND follower=%s'
     cursor.execute(query,(username))
     data = cursor.fetchall()
-    print("This is data--: ",data)
-    if(data!="None"):
-        print("helpppppppp")
-        query='SELECT DISTINCT pID,poster FROM photo JOIN follow WHERE\
-        follower=%s OR followStatus=1'
-        cursor.execute(query,(username))
-        myData = cursor.fetchall()
-        print("this is the data-----: ",myData)
-        message= "Here are the photo ID's visible to you!"
-        return render_template("photos.html",message="message",myData=myData)
-    else:
-        # groupCreator = request.form["groupCreator"]
-        # print("this is groupCreator---: ", groupCreator)
-        # print("testtttttttttttttttttttt")
-        # query = 'SELECT poster,groupName FROM photo NATURAL JOIN follow\
-        # WHERE follower=%s OR followStatus=1'
-        # cursor.execute(query,(username))
-        # thePoster = cursor.fetchall()
-        # print("This is the Poster: ",thePoster)
-        # message = "trying to show the poster"
-        message = "You have no followers"
-        return render_template("photos.html",message=message)
+    print("This is data-----: ",data)
+    # if(data!="None"):
+    #     print("helpppppppp")
+    #     query='SELECT DISTINCT pID,poster,filePath FROM photo JOIN follow WHERE\
+    #     follower=%s OR followStatus=1'
+    #     cursor.execute(query,(username))
+    #     myData = cursor.fetchall()
+    #     print("this is the data--------: ",myData)
+    #     message= "Here are the photo ID's visible to you!"
+    #     return render_template("photos.html",message="message",myData=myData)
+    # else:
+    #     # groupCreator = request.form["groupCreator"]
+    #     # print("this is groupCreator---: ", groupCreator)
+    #     # print("testtttttttttttttttttttt")
+    #     # query = 'SELECT poster,groupName FROM photo NATURAL JOIN follow\
+    #     # WHERE follower=%s OR followStatus=1'
+    #     # cursor.execute(query,(username))
+    #     # thePoster = cursor.fetchall()
+    #     # print("This is the Poster: ",thePoster)
+    #     # message = "trying to show the poster"
+    #     message = "You have no followers"
+    #     return render_template("photos.html",message=message)
 
     return render_template('photos.html')
 

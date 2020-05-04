@@ -12,21 +12,26 @@
 
     <form action="/viewPhotos" method="POST">
 
-      <h1>Starting Fresh</h1>
+      <h2>Select the photo you would like to see!</h2>
 
 
         {%for item in myData%}
+
             <label for="group">Photo ID: {{item.pID}}</label>
             <input type="radio" id="group" name="groupCreator" value={{item.poster}}></input><br>
             <!-- <input type="hidden" name="groupCreator" value={{item.poster}}><br> -->
-
+            <!-- {{item.filePath}} -->
+            <!-- <input type="hidden" name="file" value={{item.filePath}}><br><br> -->
         {%endfor%}
 
         <br>
 
         {%for item in groupData%}
-         These are the photo ID's available to you: {{item.pID}}
-        {%endfor%}
+         Photo ID: {{item.pID}}<br><br>
+         Here is the filepath for the photo you have selected:  {{item.filePath}}<br><br>
+
+         {%endfor%}
+
 
 
 
@@ -50,7 +55,7 @@
 
     </form>
 
-
+    <br><br>
 
 
 
