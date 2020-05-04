@@ -413,25 +413,26 @@ def postPhoto():
 def viewPhotos():
     if (request.method == 'POST'):
         print("ffffffffffffffffffffffffffffffuck")
-        groupCreator = request.form["groupCreator"]
+        file = request.form["file"]
         username = session["username"]
         # file = request.form["file"]
         # myfile = request.form["file"]
         # print("This is the fileeee3--------: ",file)
-        print("this is group creator help ---------: ", groupCreator)
-        cursor = conn.cursor()
-        query = 'SELECT pID,filePath FROM photo NATURAL JOIN sharedwith\
-        NATURAL JOIN belongto WHERE groupCreator=%s OR username=%s'
-        cursor.execute(query,(groupCreator,username))
-        groupData = cursor.fetchall()
-        cursor.close()
-        message = "sending friend group data"
-        return render_template("photos.html",message=message,groupData=groupData)
+        print("this is the file ----------: ", file)
+        # cursor = conn.cursor()
+        # query = 'SELECT pID,filePath FROM photo NATURAL JOIN sharedwith\
+        # NATURAL JOIN belongto WHERE groupCreator=%s OR username=%s'
+        # cursor.execute(query,(groupCreator,username))
+        # groupData = cursor.fetchall()
+        # cursor.close()
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], file)
+        message = "Displaying Photo URL"
+        return render_template("photos.html",message=message,user_image=full_filename)
         # follower = request.form["follower"]
 
         # print("This is the file-----: ",file)
         # print("This is the follower----------: ",follower)
-        # full_filename = os.path.join(app.config['UPLOAD_FOLDER'], file)
+
         # print("This is the full filename: ",full_filename)
         # # query='SELECT filePath,pID FROM photo WHERE\
         # # poster=%s OR pID IN\
@@ -443,6 +444,7 @@ def viewPhotos():
 
 
     username = session['username']
+    poster = session['username']
     # follower = request.form.get('follower')
     # print("this is follower",follower)
     cursor = conn.cursor();
@@ -450,34 +452,42 @@ def viewPhotos():
     # AND followStatus = 1'
     # query='SELECT allFollowers FROM photo NATURAL JOIN follow\
     # WHERE followStatus= 1 OR follower=%s'
-    query='SELECT pID FROM photo NATURAL JOIN follow\
-    WHERE followStatus= 1 AND follower=%s'
-    cursor.execute(query,(username))
-    data = cursor.fetchall()
-    print("This is data-----: ",data)
+    # query='SELECT pID FROM photo NATURAL JOIN follow\
+    # WHERE followStatus= 1 AND follower=%s
+    query = 'SELECT filePath, pID, firstName, lastName, postingDate, caption\
+    FROM follow NATURAL join photo NATURAL JOIN person WHERE pID IN\
+    (SELECT pID FROM follow NATURAL JOIN photo WHERE follower =\
+    %s AND poster = followee AND username = poster AND followstatus = 1)\
+    OR pID IN (SELECT pID FROM photo WHERE poster = %s\
+    AND poster = username AND followee = poster) GROUP BY pID'
+    #COULD NOT FIGURE OUT QUERY ON MY OWN HAD TO BORROW FROM CLASSMATE,
+    #THE QUERY THE PROFESSOR SUGGESTED TO ME DID NOT WORK
+    cursor.execute(query,(username,username))
+    # data = cursor.fetchall()
+    # print("This is data------: ",data)
     # if(data!="None"):
-    #     print("helpppppppp")
-    #     query='SELECT DISTINCT pID,poster,filePath FROM photo JOIN follow WHERE\
-    #     follower=%s OR followStatus=1'
-    #     cursor.execute(query,(username))
-    #     myData = cursor.fetchall()
-    #     print("this is the data--------: ",myData)
-    #     message= "Here are the photo ID's visible to you!"
-    #     return render_template("photos.html",message="message",myData=myData)
+    # print("helpppppppp")
+    # query='SELECT DISTINCT pID,poster,filePath FROM photo JOIN follow WHERE\
+    # follower=%s OR followStatus=1'
+    myData = cursor.fetchall()
+    cursor.close()
+    print("this is the data--------: ",myData)
+    message= "Here are the photo ID's visible to you!"
+    return render_template("photos.html",message="message",myData=myData)
     # else:
-    #     # groupCreator = request.form["groupCreator"]
-    #     # print("this is groupCreator---: ", groupCreator)
-    #     # print("testtttttttttttttttttttt")
-    #     # query = 'SELECT poster,groupName FROM photo NATURAL JOIN follow\
-    #     # WHERE follower=%s OR followStatus=1'
-    #     # cursor.execute(query,(username))
-    #     # thePoster = cursor.fetchall()
-    #     # print("This is the Poster: ",thePoster)
-    #     # message = "trying to show the poster"
-    #     message = "You have no followers"
-    #     return render_template("photos.html",message=message)
+        # groupCreator = request.form["groupCreator"]
+        # print("this is groupCreator---: ", groupCreator)
+        # print("testtttttttttttttttttttt")
+        # query = 'SELECT poster,groupName FROM photo NATURAL JOIN follow\
+        # WHERE follower=%s OR followStatus=1'
+        # cursor.execute(query,(username))
+        # thePoster = cursor.fetchall()
+        # print("This is the Poster: ",thePoster)
+        # message = "trying to show the poster"
+        # message = "You have no followers"
+        # return render_template("photos.html",message=message)
 
-    return render_template('photos.html')
+    # return render_template('photos.html')
 
 
 @app.route('/addfriend',methods=['POST','GET'])

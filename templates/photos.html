@@ -17,10 +17,13 @@
 
         {%for item in myData%}
 
-            <label for="group">Photo ID: {{item.pID}}</label>
-            <input type="radio" id="group" name="groupCreator" value={{item.poster}}></input><br>
+            PhotoID: {{item.pID}} <br>
+            First Name: {{item.firstName}} <br>
+            Last Name: {{item.lastName}}<br>
+            Date Posted: {{item.postingDate}}<br>
             <!-- <input type="hidden" name="groupCreator" value={{item.poster}}><br> -->
-            <!-- {{item.filePath}} -->
+            <input type="radio" id="group" name="file" value={{item.filePath}}></input><br><br><br>
+
             <!-- <input type="hidden" name="file" value={{item.filePath}}><br><br> -->
         {%endfor%}
 
@@ -39,7 +42,8 @@
 
           <!-- <img src="{{user_image}}" alt="User Image" style="width:128px;height:128px;"><br><br>  -->
           <img src="{{user_image}}" alt="user image" width="43" height="43"><br><br>
-          {{file}}
+          {{user_image}}
+          
         {%endif%}
 
 
@@ -61,7 +65,7 @@
 
 
 
-<a href="/photoInfo">View Photo Info</a><br>
+<!-- <a href="/photoInfo">View Photo Info</a><br> -->
 <a href="/home">Go Back</a>
 
   </body>
