@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>title</title>
+  </head>
+  <body>
+
+
+    <h1>Share Photo With Friends!</h1>
+    <form action="shareWithGroup" method="POST">
+
+    {%for item in data%}
+    <label for="file">Group Name: {{item.groupName}}</label>
+    <input type="radio" id="file" name="groupName" value={{item.groupName}}><br>
+    <!-- <input type="hidden" name="follower" value={{item.pID}}><br> -->
+
+    {%endfor%}
+
+<br>
+
+    {%for item in photoIDS%}
+      <label for="ID">Filepath: {{item.filePath}}</label>
+      <input type="radio" id="ID" name="file" value={{item.pID}}><br>
+    {%endfor%}
+
+
+    {%if message%}
+    <p class="error"><strong>Type of Message:</strong> {{message}}</p>
+    {%endif%}
+
+    <input type="submit">
+    </form>
+
+
+    <a href="/home">Go back</a><br>
+
+
+
+  </body>
+</html>

@@ -11,30 +11,42 @@
 
 
     <form action="/viewPhotos" method="POST">
-      {%for item in photoIDS%}
-        Photos {{item.pID}}<br>
-      {%endfor%}
+
+      <h1>Starting Fresh</h1>
 
 
-      {%for item in follower%}
+        {%for item in myData%}
+            <label for="group">Photo ID: {{item.pID}}</label>
+            <input type="radio" id="group" name="groupCreator" value={{item.poster}}></input><br>
+            <!-- <input type="hidden" name="groupCreator" value={{item.poster}}><br> -->
 
-          {{item.follower}}
-          <label for=viewFollowerPhoto>View Followers Photo</label>
-          <input type="radio" id="viewFollowersPhoto" name="follower" value={{item.follower}}>
-          <br>
-          <!-- <input type="radio" name="view" id="AllFollowersChoice" value="view" ><br> -->
+        {%endfor%}
+
+        <br>
+
+        {%for item in groupData%}
+         These are the photo ID's available to you: {{item.pID}}
+        {%endfor%}
 
 
-      {%endfor%}
+
+        {%if user_image%}
+
+          <!-- <img src="{{user_image}}" alt="User Image" style="width:128px;height:128px;"><br><br>  -->
+          <img src="{{user_image}}" alt="user image" width="43" height="43"><br><br>
+          {{file}}
+        {%endif%}
 
 
-        <input type="submit">
+        <!-- <br>
+        <label for=submit>View Photos</label><br>
+        <input id="submit"type="submit"> -->
 
       {% if message %}
         <p class="error"><strong>Type of Message:</strong> {{message}}</p>
       {% endif %}
 
-      <!-- <input type="submit"> -->
+      <input type="submit">
 
     </form>
 
@@ -44,7 +56,7 @@
 
 
 
-<a href="/photoInfo">View Photo Info</a><br> 
+<a href="/photoInfo">View Photo Info</a><br>
 <a href="/home">Go Back</a>
 
   </body>
