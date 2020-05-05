@@ -12,10 +12,10 @@
 </table>
 <br>
 {% for line in photos %}
-<tr>
-	<td>{{line.follower}}</td>
-	<td>{{line.followee}}</td>
-</tr>
+<table>
+	<th>{{line.follower}}</td>
+	<th>{{line.followee}}</td>
+</table>
 {% endfor %}
 
 Here are your photos:
@@ -82,7 +82,7 @@ specified in the the form action -->
 <a href="/friendGroups">Friend Groups</a>
 <br>
 <a href="/addfriend">Add Friend</a><br>
-<a href="/shareWithGroup">Share photo with friendgroup</a><br> 
+<a href="/shareWithGroup">Share photo with friendgroup</a><br>
 <a href="/viewPhotos">View Photos</a><br>
 <a href="/logout">Logout</a>
 

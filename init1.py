@@ -12,7 +12,7 @@ import pymysql.cursors
 #Initialize the app from Flask
 app = Flask(__name__)
 # UPLOAD_FOLDER = r'C:\Users\Brien Bledsoe\Documents\Intro_to_Databases\Project\Part3proj\Images'
-UPLOAD_FOLDER = r'C:\Users\Brien Bledsoe\Documents\Intro_to_Databases\Project\Part3proj\Images'
+UPLOAD_FOLDER = r'C:\Users\Brien Bledsoe\Documents\Intro_to_Databases\Project\Part3proj\static\Images'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 # app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -154,26 +154,26 @@ def home():
     # representing all of the rows we got back when we executed this query
 
 
-@app.route('/post', methods=['GET', 'POST'])
-def post():
-    username = session['username']
-    #grabbing the username from the session dictionary, which has username that was previously stored when
-    #we logged in
-    cursor = conn.cursor();
-    #set up the connection
-    blog = request.form['blog']
-    #fetching our parameter blog, which is passed in the home.html form
-    query = 'INSERT INTO blog (blog_post, username) VALUES(%s, %s)'
-    #query that we are going to insert into the blog table
-    # attributes we are sending is blog_post and username and the values are going to be two
-    # strings
-    cursor.execute(query, (blog, username))
-    # when we execute those queries we are going to abstantiate those strings, with blog
-    # the test that we typed into the text box ^, and username which is the logged in user
-    conn.commit()
-
-    cursor.close()
-    return redirect(url_for('home'))
+# @app.route('/post', methods=['GET', 'POST'])
+# def post():
+#     username = session['username']
+#     #grabbing the username from the session dictionary, which has username that was previously stored when
+#     #we logged in
+#     cursor = conn.cursor();
+#     #set up the connection
+#     blog = request.form['blog']
+#     #fetching our parameter blog, which is passed in the home.html form
+#     query = 'INSERT INTO blog (blog_post, username) VALUES(%s, %s)'
+#     #query that we are going to insert into the blog table
+#     # attributes we are sending is blog_post and username and the values are going to be two
+#     # strings
+#     cursor.execute(query, (blog, username))
+#     # when we execute those queries we are going to abstantiate those strings, with blog
+#     # the test that we typed into the text box ^, and username which is the logged in user
+#     conn.commit()
+#
+#     cursor.close()
+#     return redirect(url_for('home'))
 
 @app.route('/select_user')
 def select_blogger():
@@ -427,7 +427,7 @@ def viewPhotos():
         # cursor.close()
         full_filename = os.path.join(app.config['UPLOAD_FOLDER'], file)
         message = "Displaying Photo URL"
-        return render_template("photos.html",message=message,user_image=full_filename)
+        return render_template("photos.html",message=message,user_image=full_filename,file=file)
         # follower = request.form["follower"]
 
         # print("This is the file-----: ",file)

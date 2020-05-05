@@ -38,13 +38,24 @@
 
 
 
+
+
+         {%if file%}
+         <img src="static/Images/{{file}}" alt="user image" width="400" height="243"><br><br>
+
+         {%endif%}
+
+         <br><br>
         {%if user_image%}
 
           <!-- <img src="{{user_image}}" alt="User Image" style="width:128px;height:128px;"><br><br>  -->
-          <img src="{{user_image}}" alt="user image" width="43" height="43"><br><br>
+          <!-- <img src="{{user_image}}" alt="user image" width="43" height="43"><br><br> -->
           {{user_image}}
-          
+
         {%endif%}
+
+
+
 
 
         <!-- <br>
