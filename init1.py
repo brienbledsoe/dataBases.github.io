@@ -135,7 +135,11 @@ def home():
     #first thing the home page does is get back the stored username session variable and store
     #it to some python variable
     cursor = conn.cursor();
-    query = 'SELECT postingDate, pID,follower,followee FROM photo NATURAL JOIN follow WHERE poster = %s ORDER BY postingDate DESC'
+    query = 'SELECT followee FROM follow WHERE follower=%s AND followStatus=1'
+    # query = 'SELECT followee FROM follow\
+    # WHERE follower=%s AND followee IN\
+    # (SELECT followee FROM follow WHERE followStatus=1 OR followStatus=0)'
+    #SELECTING USERS WHO ACCEPTED FOLLOW REQUEST AND DID NOT ACCEPT FOR CURRENT USER
     #also bringing in all the post the user made along with the timestamp and ORDER
     #of timestamps, so we can get them in reverse chronological order
     cursor.execute(query, (user))
@@ -153,42 +157,6 @@ def home():
     #so posts is going to be some kind of list of lists, along with some meta data thats
     # representing all of the rows we got back when we executed this query
 
-
-# @app.route('/post', methods=['GET', 'POST'])
-# def post():
-#     username = session['username']
-#     #grabbing the username from the session dictionary, which has username that was previously stored when
-#     #we logged in
-#     cursor = conn.cursor();
-#     #set up the connection
-#     blog = request.form['blog']
-#     #fetching our parameter blog, which is passed in the home.html form
-#     query = 'INSERT INTO blog (blog_post, username) VALUES(%s, %s)'
-#     #query that we are going to insert into the blog table
-#     # attributes we are sending is blog_post and username and the values are going to be two
-#     # strings
-#     cursor.execute(query, (blog, username))
-#     # when we execute those queries we are going to abstantiate those strings, with blog
-#     # the test that we typed into the text box ^, and username which is the logged in user
-#     conn.commit()
-#
-#     cursor.close()
-#     return redirect(url_for('home'))
-
-@app.route('/select_user')
-def select_blogger():
-    #check that user is logged in
-    username = session['username']
-    #should throw exception if username not found
-    cursor = conn.cursor();
-    query = 'SELECT DISTINCT username FROM person'
-    #only going to users who have actually posted something
-    #and since their might be multiple posts, posted by the same person we are going to
-    #use SELECT DISTINCT
-    cursor.execute(query)
-    data = cursor.fetchall()
-    cursor.close()
-    return render_template('select_user.html', user_list=data)
 
 @app.route('/follow', methods=["GET","POST","DELETE"])
 def followUser():
